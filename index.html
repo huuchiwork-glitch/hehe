@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Gửi cậu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
 
   <style>
@@ -42,7 +41,7 @@
     }
 
     button {
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 10px 26px;
       border: 1px solid rgba(255,255,255,0.8);
       background: transparent;
@@ -107,7 +106,6 @@
 </head>
 
 <body>
-<button id="startMusic">🔊 Bật nhạc</button>
 
 <!-- 🎵 NHẠC NỀN -->
 <audio id="bgm" loop>
@@ -119,7 +117,10 @@
 <div class="container">
   <p id="text"></p>
 
-  <button id="nextBtn" onclick="nextText()">Next</button>
+  <!-- 🔊 Nút bật / tắt nhạc -->
+  <button id="startMusic">🔊 Bật nhạc</button>
+
+  <button id="nextBtn">Next</button>
 
   <div class="buttons" id="choice">
     <button onclick="chooseYes()">Có</button>
@@ -143,20 +144,26 @@
   const textEl = document.getElementById("text");
   const nextBtn = document.getElementById("nextBtn");
   const choice = document.getElementById("choice");
-
   textEl.innerText = texts[index];
 
-  /* 🎵 Điều khiển nhạc */
+  /* ===== Nhạc ===== */
   const bgm = document.getElementById("bgm");
-  let musicPlayed = false;
+  let musicOn = false;
 
-  function nextText() {
-    if (!musicPlayed) {
+  document.getElementById("startMusic").addEventListener("click", () => {
+    if (!musicOn) {
       bgm.volume = 0.5;
       bgm.play().catch(()=>{});
-      musicPlayed = true;
+      document.getElementById("startMusic").innerText = "🔇 Tắt nhạc";
+      musicOn = true;
+    } else {
+      bgm.pause();
+      document.getElementById("startMusic").innerText = "🔊 Bật nhạc";
+      musicOn = false;
     }
+  });
 
+  nextBtn.addEventListener("click", () => {
     index++;
     if (index < texts.length) {
       textEl.innerText = texts[index];
@@ -164,25 +171,15 @@
       nextBtn.style.display = "none";
       choice.style.display = "block";
     }
-  }
+  });
 
   function chooseYes() {
-    fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=co", {
-      method: "POST",
-      mode: "no-cors"
-    });
-
     textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
     choice.style.display = "none";
     document.getElementById("heart").style.display = "block";
   }
 
   function chooseNo() {
-    fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=khong", {
-      method: "POST",
-      mode: "no-cors"
-    });
-
     textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
     choice.style.display = "none";
     document.getElementById("sad").style.display = "block";
@@ -216,67 +213,20 @@
   for (let i = 0; i < 50; i++) particles.push(createParticle("snow"));
   for (let i = 0; i < 20; i++) particles.push(createParticle("sakura"));
 
-  function drawRainbow() {
-    const cx = w / 2;
-    const cy = h + 100;
-    const radius = w * 0.6;
-    const colors = [
-      "rgba(255,0,0,0.15)",
-      "rgba(255,165,0,0.15)",
-      "rgba(255,255,0,0.15)",
-      "rgba(0,255,0,0.15)",
-      "rgba(0,127,255,0.15)",
-      "rgba(75,0,130,0.15)",
-      "rgba(148,0,211,0.15)"
-    ];
-
-    colors.forEach((c, i) => {
-      ctx.beginPath();
-      ctx.strokeStyle = c;
-      ctx.lineWidth = 12;
-      ctx.arc(cx, cy, radius - i * 14, Math.PI, Math.PI * 2);
-      ctx.stroke();
-    });
-  }
-
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    drawRainbow();
-
     particles.forEach(p => {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-
       ctx.fillStyle = p.type === "snow"
         ? "rgba(255,255,255,0.9)"
         : "rgba(255,182,193,0.8)";
-
       ctx.beginPath();
-      ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.restore();
-
       p.y += p.speedY;
-      p.x += p.speedX;
-      p.angle += 0.01;
-
-      if (p.y > h) {
-        p.y = -10;
-        p.x = Math.random() * w;
-      }
+      if (p.y > h) p.y = -10;
     });
-
     requestAnimationFrame(draw);
   }
-const bgm = document.getElementById("bgm");
-
-document.getElementById("startMusic").addEventListener("click", () => {
-  bgm.volume = 0.5;
-  bgm.play().catch(()=>{});
-  document.getElementById("startMusic").style.display = "none";
-});
-
   draw();
 </script>
 
