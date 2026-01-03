@@ -107,6 +107,7 @@
 </head>
 
 <body>
+<button id="startMusic">🔊 Bật nhạc</button>
 
 <!-- 🎵 NHẠC NỀN -->
 <audio id="bgm" loop>
@@ -268,6 +269,13 @@
 
     requestAnimationFrame(draw);
   }
+const bgm = document.getElementById("bgm");
+
+document.getElementById("startMusic").addEventListener("click", () => {
+  bgm.volume = 0.5;
+  bgm.play().catch(()=>{});
+  document.getElementById("startMusic").style.display = "none";
+});
 
   draw();
 </script>
