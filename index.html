@@ -5,7 +5,6 @@
   <title>Gửi cậu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Font phong cách Nhật -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
 
   <style>
@@ -19,29 +18,19 @@
     .container {
       max-width: 600px;
       margin: 0 auto;
-      padding: 70px 30px;
+      padding: 80px 30px;
       text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: normal;
-      margin-bottom: 40px;
     }
 
     p {
       font-size: 16px;
       line-height: 2;
-      margin-bottom: 30px;
-    }
-
-    .buttons {
-      margin-top: 40px;
+      min-height: 120px;
     }
 
     button {
+      margin-top: 30px;
       padding: 10px 26px;
-      margin: 0 10px;
       border: 1px solid #aaa;
       background: transparent;
       font-size: 14px;
@@ -52,6 +41,11 @@
 
     button:hover {
       background: #eee;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: none;
     }
 
     /* Trái tim */
@@ -87,7 +81,7 @@
     }
 
     @keyframes beat {
-      0%, 100% { transform: rotate(-45deg) scale(1); }
+      0%,100% { transform: rotate(-45deg) scale(1); }
       50% { transform: rotate(-45deg) scale(1.2); }
     }
 
@@ -96,54 +90,58 @@
       display: none;
       margin-top: 30px;
     }
-
-    #result {
-      margin-top: 20px;
-      font-size: 15px;
-      color: #555;
-    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>Sau buổi gặp đầu tiên</h1>
+    <p id="text"></p>
 
-    <p>
-      Mình đã rất vui.<br>
-      Không biết cậu có giống mình không,<br>
-      nhưng mình muốn hỏi một điều…
-    </p>
+    <button id="nextBtn" onclick="nextText()">Next</button>
 
-    <p>
-      👉 Cậu có muốn có thêm nhiều buổi như vậy nữa<br>
-      cùng mình không?
-    </p>
-
-    <div class="buttons">
+    <div class="buttons" id="choice">
       <button onclick="chooseYes()">Có</button>
       <button onclick="chooseNo()">Không</button>
     </div>
 
     <div class="heart" id="heart"></div>
     <div class="sad" id="sad">😔</div>
-
-    <div id="result"></div>
   </div>
 
   <script>
+    const texts = [
+      "Sau buổi gặp đầu tiên,\nmình đã rất vui.",
+      "Không biết cậu có giống mình không,\nnhưng mình vẫn nghĩ về khoảnh khắc đó.",
+      "Cậu có muốn có thêm\nnhiều buổi như vậy nữa cùng mình không?"
+    ];
+
+    let index = 0;
+    const textEl = document.getElementById("text");
+    const nextBtn = document.getElementById("nextBtn");
+    const choice = document.getElementById("choice");
+
+    textEl.innerText = texts[index];
+
+    function nextText() {
+      index++;
+      if (index < texts.length) {
+        textEl.innerText = texts[index];
+      } else {
+        nextBtn.style.display = "none";
+        choice.style.display = "block";
+      }
+    }
+
     function chooseYes() {
+      textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
+      choice.style.display = "none";
       document.getElementById("heart").style.display = "block";
-      document.getElementById("sad").style.display = "none";
-      document.getElementById("result").innerHTML =
-        "Vậy hẹn ngày gần nhất nhé 💗";
     }
 
     function chooseNo() {
-      document.getElementById("heart").style.display = "none";
+      textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
+      choice.style.display = "none";
       document.getElementById("sad").style.display = "block";
-      document.getElementById("result").innerHTML =
-        "Có lẽ mình đã hơi vội vàng rồi… hicc";
     }
   </script>
 </body>
