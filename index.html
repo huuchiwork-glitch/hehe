@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Gửi cậu</title>
+  <title>Hi chào cậu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
@@ -121,8 +121,8 @@
   <button id="nextBtn" onclick="nextText()">Next</button>
 
   <div class="buttons" id="choice">
-    <button onclick="chooseYes()">Có</button>
-    <button onclick="chooseNo()">Không</button>
+    <button onclick="chooseYes()">Đi xa hơn</button>
+    <button onclick="chooseNo()">Không hợp lắm, dừng ở đây thui</button>
   </div>
 
   <div class="heart" id="heart"></div>
@@ -174,7 +174,7 @@
       mode: "no-cors"
     });
 
-    textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
+    textEl.innerText = "Vậy hẹn ngày gần nhất nhé, vào được cuồi tuần thì tốt 💗";
     choice.style.display = "none";
     document.getElementById("heart").style.display = "block";
   }
@@ -185,7 +185,7 @@
       mode: "no-cors"
     });
 
-    textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
+    textEl.innerText = "Hicc...không sao cảcả";
     choice.style.display = "none";
     document.getElementById("sad").style.display = "block";
   }
