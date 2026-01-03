@@ -150,17 +150,29 @@
     }
   }
 
-  function chooseYes() {
-    textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
-    choice.style.display = "none";
-    document.getElementById("heart").style.display = "block";
-  }
+function chooseYes() {
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=co", {
+    method: "POST",
+    mode: "no-cors"
+  });
 
-  function chooseNo() {
-    textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
-    choice.style.display = "none";
-    document.getElementById("sad").style.display = "block";
-  }
+  textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
+  choice.style.display = "none";
+  document.getElementById("heart").style.display = "block";
+}
+
+
+function chooseNo() {
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=khong", {
+    method: "POST",
+    mode: "no-cors"
+  });
+
+  textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
+  choice.style.display = "none";
+  document.getElementById("sad").style.display = "block";
+}
+
 
   /* ===== Canvas: Tuyết + Hoa + Cầu vồng ===== */
   const canvas = document.getElementById("canvas");
