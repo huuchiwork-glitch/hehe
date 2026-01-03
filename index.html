@@ -62,7 +62,6 @@
       display: none;
     }
 
-    /* Trái tim */
     .heart {
       width: 80px;
       height: 80px;
@@ -109,6 +108,11 @@
 
 <body>
 
+<!-- 🎵 NHẠC NỀN -->
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <canvas id="canvas"></canvas>
 
 <div class="container">
@@ -140,7 +144,17 @@
 
   textEl.innerText = texts[index];
 
+  /* 🎵 Điều khiển nhạc */
+  const bgm = document.getElementById("bgm");
+  let musicPlayed = false;
+
   function nextText() {
+    if (!musicPlayed) {
+      bgm.volume = 0.5;
+      bgm.play().catch(()=>{});
+      musicPlayed = true;
+    }
+
     index++;
     if (index < texts.length) {
       textEl.innerText = texts[index];
@@ -150,31 +164,29 @@
     }
   }
 
-function chooseYes() {
-  fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=co", {
-    method: "POST",
-    mode: "no-cors"
-  });
+  function chooseYes() {
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=co", {
+      method: "POST",
+      mode: "no-cors"
+    });
 
-  textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
-  choice.style.display = "none";
-  document.getElementById("heart").style.display = "block";
-}
+    textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
+    choice.style.display = "none";
+    document.getElementById("heart").style.display = "block";
+  }
 
+  function chooseNo() {
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=khong", {
+      method: "POST",
+      mode: "no-cors"
+    });
 
-function chooseNo() {
-  fetch("https://docs.google.com/forms/d/e/1FAIpQLSekC2Aj2Gft8pq0p_RL5B13eEn7ajBpLEo-bsTYcA8oKj5pBA/formResponse?entry.404731840=khong", {
-    method: "POST",
-    mode: "no-cors"
-  });
+    textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
+    choice.style.display = "none";
+    document.getElementById("sad").style.display = "block";
+  }
 
-  textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
-  choice.style.display = "none";
-  document.getElementById("sad").style.display = "block";
-}
-
-
-  /* ===== Canvas: Tuyết + Hoa + Cầu vồng ===== */
+  /* ===== Canvas ===== */
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
   let w, h;
@@ -227,7 +239,6 @@ function chooseNo() {
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-
     drawRainbow();
 
     particles.forEach(p => {
@@ -235,11 +246,9 @@ function chooseNo() {
       ctx.translate(p.x, p.y);
       ctx.rotate(p.angle);
 
-      if (p.type === "snow") {
-        ctx.fillStyle = "rgba(255,255,255,0.9)";
-      } else {
-        ctx.fillStyle = "rgba(255,182,193,0.8)";
-      }
+      ctx.fillStyle = p.type === "snow"
+        ? "rgba(255,255,255,0.9)"
+        : "rgba(255,182,193,0.8)";
 
       ctx.beginPath();
       ctx.arc(0, 0, p.r, 0, Math.PI * 2);
