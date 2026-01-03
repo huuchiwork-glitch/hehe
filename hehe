@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Gửi đến người đặc biệt</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+      background: linear-gradient(#ffeef2, #ffffff);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 400px;
+    }
+    h1 {
+      color: #e75480;
+    }
+    p {
+      color: #555;
+      line-height: 1.8;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #e75480;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #d8436c;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>はじめまして 🌸</h1>
+    <p>
+      Gặp bạn lần đầu, mình đã nghĩ<br>
+      “Người này thật đặc biệt.”
+    </p>
+    <p>
+      Nếu bạn đọc được trang này,<br>
+      thì có lẽ… đó là duyên rồi 😊
+    </p>
+    <button onclick="alert('Mình rất vui nếu được nói chuyện với bạn 💕')">
+      Nhấn thử đi
+    </button>
+  </div>
+</body>
+</html>
