@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Hi chào cậu</title>
+  <title>Gửi cậu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
@@ -13,9 +13,20 @@
       background: #fafafa;
       font-family: "Noto Serif", serif;
       color: #333;
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .container {
+      position: relative;
+      z-index: 1;
       max-width: 600px;
       margin: 0 auto;
       padding: 80px 30px;
@@ -26,6 +37,7 @@
       font-size: 16px;
       line-height: 2;
       min-height: 120px;
+      white-space: pre-line;
     }
 
     button {
@@ -94,55 +106,125 @@
 </head>
 
 <body>
-  <div class="container">
-    <p id="text"></p>
 
-    <button id="nextBtn" onclick="nextText()">Next</button>
+<canvas id="canvas"></canvas>
 
-    <div class="buttons" id="choice">
-      <button onclick="chooseYes()">Có</button>
-      <button onclick="chooseNo()">Không</button>
-    </div>
+<div class="container">
+  <p id="text"></p>
 
-    <div class="heart" id="heart"></div>
-    <div class="sad" id="sad">😔</div>
+  <button id="nextBtn" onclick="nextText()">Next</button>
+
+  <div class="buttons" id="choice">
+    <button onclick="chooseYes()">Có</button>
+    <button onclick="chooseNo()">Không</button>
   </div>
 
-  <script>
-    const texts = [
-      "Sau buổi gặp đầu tiên,\nmình đã rất vui.",
-      "Mình nghĩ là nó cũng khá thành công đó chứ,\nnhưng không biết Ánh có nghĩ giống mình không.",
-      "Ánh có muốn có thêm\nnhiều buổi như vậy hơnhơn nữa cùng mình không?"
-    ];
+  <div class="heart" id="heart"></div>
+  <div class="sad" id="sad">😔</div>
+</div>
 
-    let index = 0;
-    const textEl = document.getElementById("text");
-    const nextBtn = document.getElementById("nextBtn");
-    const choice = document.getElementById("choice");
+<script>
+  /* ===== Nội dung từng bước ===== */
+  const texts = [
+    "Sau buổi gặp đầu tiên,\nmình đã rất vui.",
+    "Không biết cậu có giống mình không,\nnhưng mình vẫn nghĩ về khoảnh khắc đó.",
+    "Cậu có muốn có thêm\nnhiều buổi như vậy nữa cùng mình không?"
+  ];
 
-    textEl.innerText = texts[index];
+  let index = 0;
+  const textEl = document.getElementById("text");
+  const nextBtn = document.getElementById("nextBtn");
+  const choice = document.getElementById("choice");
 
-    function nextText() {
-      index++;
-      if (index < texts.length) {
-        textEl.innerText = texts[index];
+  textEl.innerText = texts[index];
+
+  function nextText() {
+    index++;
+    if (index < texts.length) {
+      textEl.innerText = texts[index];
+    } else {
+      nextBtn.style.display = "none";
+      choice.style.display = "block";
+    }
+  }
+
+  function chooseYes() {
+    textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
+    choice.style.display = "none";
+    document.getElementById("heart").style.display = "block";
+  }
+
+  function chooseNo() {
+    textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
+    choice.style.display = "none";
+    document.getElementById("sad").style.display = "block";
+  }
+
+  /* ===== Hoa anh đào & Tuyết ===== */
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  let w, h;
+  let particles = [];
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  function createParticle(type) {
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: type === "sakura" ? 6 + Math.random() * 6 : 2 + Math.random() * 2,
+      speedY: type === "sakura" ? 0.6 + Math.random() : 0.3 + Math.random(),
+      speedX: type === "sakura" ? -0.5 + Math.random() : 0,
+      angle: Math.random() * Math.PI,
+      type: type
+    };
+  }
+
+  for (let i = 0; i < 30; i++) particles.push(createParticle("sakura"));
+  for (let i = 0; i < 40; i++) particles.push(createParticle("snow"));
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+
+      if (p.type === "sakura") {
+        ctx.fillStyle = "rgba(255,182,193,0.8)";
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+        ctx.fill();
       } else {
-        nextBtn.style.display = "none";
-        choice.style.display = "block";
+        ctx.fillStyle = "rgba(255,255,255,0.8)";
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+        ctx.fill();
       }
-    }
 
-    function chooseYes() {
-      textEl.innerText = "Vậy hẹn ngày gần nhất nhé 💗";
-      choice.style.display = "none";
-      document.getElementById("heart").style.display = "block";
-    }
+      ctx.restore();
 
-    function chooseNo() {
-      textEl.innerText = "Có lẽ mình đã hơi vội vàng rồi… hicc";
-      choice.style.display = "none";
-      document.getElementById("sad").style.display = "block";
-    }
-  </script>
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.angle += 0.01;
+
+      if (p.y > h) {
+        p.y = -10;
+        p.x = Math.random() * w;
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
+
 </body>
 </html>
